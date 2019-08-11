@@ -15,5 +15,5 @@
 ## Contact Me
 
 - Email Me: hovhannisian.melqon@gmail.com
-- [Follow me on Instagram](https://www.instagram.com/hovhannisian/)
+- Follow me on Instagram: (https://www.instagram.com/hovhannisian/)
 
