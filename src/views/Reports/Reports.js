@@ -63,7 +63,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function AlignItemsList(props) {
-  var {history, socket} = props
+  var {socket , user} = props
   
   const classes = useStyles();
   
@@ -90,7 +90,7 @@ function AlignItemsList(props) {
 
   const handleSend = () => {
     let {description,estimation,spent} = values
-    socket.emit("sendReport", history.user._id,description,estimation,spent)
+    socket.emit("sendReport",user._id,description,estimation,spent)
     socket.on("sendReportSuccees",() => {
       socket.emit('getReports')
 
@@ -177,4 +177,4 @@ function AlignItemsList(props) {
 }
 
 
-export default withRouter(AlignItemsList)
+export default AlignItemsList
