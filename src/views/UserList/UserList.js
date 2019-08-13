@@ -1,18 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { makeStyles } from '@material-ui/styles';
 import { UsersToolbar, UsersTable } from './components';
-import openSocket from 'socket.io-client';
-const socket = openSocket('http://localhost:4001');
-socket.emit("getUsers")
-
-var userss = []
-socket.on("getUsersSuccees", (users) => {
-   userss = users;
-   console.log(users)
-})
-socket.on("getUserError",(error) => {
-})
-
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -23,7 +11,18 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const UserList = () => {
+const UserList = props => {
+  console.log("userlist props",props )
+  const {socket} = props
+  var userss = []
+  socket.emit("getUsers")
+  socket.on("getUsersSuccees", (users) => {
+   userss = users;
+   console.log(users)
+})
+socket.on("getUserError",(error) => {
+  console.log(error)
+})
   const classes = useStyles();
   return (
     <div className={classes.root}>

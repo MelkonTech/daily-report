@@ -12,9 +12,6 @@ import {
   Typography
 } from '@material-ui/core';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-import openSocket from 'socket.io-client';
-
-const socket = openSocket('http://localhost:4001');
 
 
 
@@ -126,7 +123,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const SignUp = props => {
-  const { history } = props;
+  const { history, socket } = props;
 
   const classes = useStyles();
 

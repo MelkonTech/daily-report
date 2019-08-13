@@ -1,9 +1,8 @@
 import React from 'react';
-import { withRouter } from 'react-router-dom';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/styles';
-import {  Typography } from '@material-ui/core';
+import { Typography } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -18,34 +17,23 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const Profile = props => {
-  const { className,  ...rest } = props;
-  const history = props.history
+  const { className } = props;
+  const { name, type } = props.user;
+  console.log('prof props', props);
   const classes = useStyles();
 
-  const user = {
-    name: "history.user.name",
-    type: "history.user.type"
-  };
-
   return (
-    <div
-      {...rest}
-      className={clsx(classes.root, className)}
-    >
-      <Typography
-        className={classes.name}
-        variant="h4"
-      >
-        {user.name}
+    <div className={clsx(classes.root, className)}>
+      <Typography className={classes.name} variant="h4">
+        {name}
       </Typography>
-      <Typography variant="body2">{user.type}</Typography>
+      <Typography variant="body2">{type}</Typography>
     </div>
   );
 };
 
 Profile.propTypes = {
-  className: PropTypes.string,
-  history: PropTypes.object
+  className: PropTypes.string
 };
 
-export default withRouter(Profile);
+export default Profile;

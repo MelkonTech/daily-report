@@ -12,8 +12,6 @@ import {
   Typography
 } from '@material-ui/core';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-import openSocket from 'socket.io-client';
-const socket = openSocket('http://localhost:4001');
 
 const schema = {
   email: {
@@ -126,7 +124,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const SignIn = props => {
-  const { history } = props;
+  const { history , getUser, socket} = props;
 
   const classes = useStyles();
 
@@ -175,6 +173,7 @@ const SignIn = props => {
     socket.emit("login", formState.values)
     socket.on("LogSuccees", data => {
       localStorage.setItem("token",data.token)
+      getUser()
       history.push('/account');
     })
     socket.on("LogError", data => {
@@ -203,21 +202,20 @@ const SignIn = props => {
                 className={classes.quoteText}
                 variant="h1"
               >
-                Hella narwhal Cosby sweater McSweeney's, salvia kitsch before
-                they sold out High Life.
+                Daily Reports
               </Typography>
               <div className={classes.person}>
                 <Typography
                   className={classes.name}
                   variant="body1"
                 >
-                  Takamaru Ayako
+                  ...
                 </Typography>
                 <Typography
                   className={classes.bio}
                   variant="body2"
                 >
-                  Manager at inVision
+                  for AOD
                 </Typography>
               </div>
             </div>

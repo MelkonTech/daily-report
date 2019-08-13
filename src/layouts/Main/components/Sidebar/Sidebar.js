@@ -9,7 +9,6 @@ import TextFieldsIcon from '@material-ui/icons/TextFields';
 import ImageIcon from '@material-ui/icons/Image';
 import AccountBoxIcon from '@material-ui/icons/AccountBox';
 import SettingsIcon from '@material-ui/icons/Settings';
-import LockOpenIcon from '@material-ui/icons/LockOpen';
 
 import { Profile, SidebarNav } from './components';
 
@@ -38,7 +37,7 @@ const useStyles = makeStyles(theme => ({
 
 const Sidebar = props => {
   const { open, variant, onClose, className, ...rest } = props;
-
+  console.log("sidebar props",props)
   const classes = useStyles();
 
   const pages = [
@@ -58,8 +57,8 @@ const Sidebar = props => {
       icon: <TextFieldsIcon />
     },
     {
-      title: 'Icons',
-      href: '/icons',
+      title: 'Reports',
+      href: '/Reports',
       icon: <ImageIcon />
     },
     {
@@ -86,7 +85,7 @@ const Sidebar = props => {
         {...rest}
         className={clsx(classes.root, className)}
       >
-        <Profile />
+        <Profile {...props}/>
         <Divider className={classes.divider} />
         <SidebarNav
           className={classes.nav}

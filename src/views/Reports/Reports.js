@@ -1,4 +1,4 @@
-import React, {useEffect ,useState} from 'react';
+import React, {useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -12,9 +12,6 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import Button from '@material-ui/core/Button';
 import {withRouter} from 'react-router-dom';
 import GridList from '@material-ui/core/GridList';
-import openSocket from 'socket.io-client';
-
-const socket = openSocket('http://localhost:4001');
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -66,7 +63,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function AlignItemsList(props) {
-  var {history} = props
+  var {history, socket} = props
   
   const classes = useStyles();
   
