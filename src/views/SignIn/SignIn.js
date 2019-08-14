@@ -175,7 +175,7 @@ const SignIn = props => {
     socket.on('LogSuccees', data => {
       localStorage.setItem('token', data.token);
       getuser();
-      history.push('/account');
+      history.push('/reports');
     });
     socket.on('LogError', data => {
       console.log(data.error);

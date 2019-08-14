@@ -1,5 +1,5 @@
-import React, {useEffect } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import React from 'react';
+import { withStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import Divider from '@material-ui/core/Divider';
@@ -10,10 +10,9 @@ import TextField from '@material-ui/core/TextField';
 import Input from '@material-ui/core/Input';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import Button from '@material-ui/core/Button';
-import {withRouter} from 'react-router-dom';
 import GridList from '@material-ui/core/GridList';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = theme => ({
   root: {
     width: '100%',
     backgroundColor: theme.palette.background.paper,
@@ -60,90 +59,98 @@ const useStyles = makeStyles(theme => ({
   someone:{
     fontSize:20
   }
-}));
+});
 
-function AlignItemsList(props) {
-  var {socket , user} = props
+class AlignItemsList extends React.Component {
+  constructor(props){
+    super(props)
+    this.state = {
+      description: '',
+      estimation: '',
+      spent:'',
+      reports:[],
+    }
+    this.getReports()
+    this.handleChange = this.handleChange.bind(this)
+    this.handleSend = this.handleSend.bind(this)
+    this.getReports = this.getReports.bind(this)
+  }
   
-  const classes = useStyles();
-  
-  const [values, setValues] = React.useState({
-    description: '',
-    estimation: '',
-    spent:'',
-    reports:[],
-    
-  });
-  
-
-  
-  const handleChange = name => event => {
+  handleChange = name => event => {
     if ((name === 'estimation') && ((parseInt(event.target.value) < 1) || (parseInt(event.target.value) > 10)) ) {
       event.target.value = 0
     }else if((name === 'spent') && ((parseInt(event.target.value) < 0) || (parseInt(event.target.value) > 24)) ){
       event.target.value = 0
     }else{
-    setValues({ ...values, [name]: event.target.value });
+      this.setState({
+        [name]:event.target.value
+      })
     }
   };
 
 
-  const handleSend = () => {
-    let {description,estimation,spent} = values
+  handleSend = () => {
+    let {socket, user} = this.props.state
+    let {description,estimation,spent} = this.state
     socket.emit("sendReport",user._id,description,estimation,spent)
     socket.on("sendReportSuccees",() => {
       socket.emit('getReports')
 
     })
   }
-  useEffect(() => {
-    socket.emit('getReports')}, []);
 
+  getReports() {
+    console.log('get Reports',this.props)
+    let { socket } = this.props.state;
+    socket.emit('getReports',this.props.state.user._id);
     socket.on('getReportsSuccees',(rep) =>{
-      setValues({ ...values, reports: rep });
-      console.log(values.reports)
+      this.setState({reports: rep });
+      console.log(this.state.reports)
     })
-    
+  }
+  
+    render(){
+      const {classes} = this.props;
   return (
     <div>
     <form className={classes.container} noValidate autoComplete="off">
           <TextField
         id="filled-dense-multiline"
         label="Description"
-        value={values.description}
+        value={this.state.description}
         className={clsx(classes.textField)}
-        onChange={handleChange('description')}
+        onChange={this.handleChange('description')}
         multiline
         rowsMax="4"
       />
       <TextField
         id="filled-number"
         label="estimation "
-        value={values.estimation}
-        onChange={handleChange('estimation')}
+        value={this.state.estimation}
+        onChange={this.handleChange('estimation')}
         type="number"
         className={classes.textField}
       />
         <Input
           id="adornmentSpend"
-          value={values.spent}
-          onChange={handleChange('spent')}
+          value={this.state.spent}
+          onChange={this.handleChange('spent')}
           className={clsx(classes.textField)}
           type="number"
           endAdornment={<InputAdornment position="end">Hour(s)</InputAdornment>}
           label="Spent"
           variant="filled"
         />
-        <Button variant="contained" color="primary" onClick={handleSend} className={classes.button}>
+        <Button variant="contained" color="primary" onClick={this.handleSend} className={classes.button}>
         Send
         </Button>
  
       </form>
       <GridList spacing={1} className={classes.gridList}>
       <List className={classes.root}>
-      {values.reports.map(report => {
+      {this.state.reports.map(report => {
         // console.log(history.user.email,report.author.email)
-        // let cls = report.author.email === history.user.email ? values.me : values.someone
+        // let cls = report.author.email === history.user.email ? this.state.me : this.state.someone
         return (
         <div>
         <ListItem alignItems="flex-start">
@@ -174,7 +181,8 @@ function AlignItemsList(props) {
     
     </div>
   );
+        }
 }
 
 
-export default AlignItemsList
+export default withStyles(useStyles)(AlignItemsList)

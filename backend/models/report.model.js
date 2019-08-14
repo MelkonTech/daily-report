@@ -1,7 +1,5 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
-let User = require('./user.model')
-
 const reportSchema = new Schema(
     {
         author : { type: mongoose.Schema.Types.ObjectId, ref: 'User', required:true },

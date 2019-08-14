@@ -112,12 +112,15 @@ io.on('connection', socket => {
        
         
 
-    socket.on('getReports', () => {
-        Report.find({})
-        .populate('author') 
-        .exec(function (err, reports) {
-            io.sockets.emit("getReportsSuccees",reports)
-        });
+    socket.on('getReports', (userId) => {
+        User.findById(userId)
+            .then(() => {
+                Report.find({})
+                    .populate('author') 
+                    .exec(function (err, reports) {
+                        io.sockets.emit("getReportsSuccees",reports)
+                    });
+                })
         })
 
     socket.on('disconnect', () => {

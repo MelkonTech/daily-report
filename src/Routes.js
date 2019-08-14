@@ -14,7 +14,7 @@ import openSocket from 'socket.io-client';
 class Routes extends React.Component {
   constructor(props) {
     super(props);
-    const socket = openSocket('http://localhost:4000');
+    const socket = openSocket('http://localhost:4001');
     this.state = {
       user: {},
       socket: socket
@@ -48,13 +48,14 @@ class Routes extends React.Component {
   }
   render() {
     console.log('render state',this.state)
-    let loged = localStorage.getItem('token') ? '/account' : '/sign-in';
+    let loged = localStorage.getItem('token') ? '/reports' : '/sign-in';
     return (
       <Switch>
         <Redirect exact from="/" to={loged} />
         
-        {if(this.state.user.type === admin){
+        {this.state.user.type === "admin" ? (
            (
+             <div>
             <Route
           render={() => (
             <MainLayout {...this }>
@@ -64,8 +65,18 @@ class Routes extends React.Component {
           exact
           path="/users"
         />
+        <Route
+          render={() => (
+            <MainLayout {...this }>
+              <UserListView {...this} />
+            </MainLayout>
+          )}
+          exact
+          path="/notifications"
+        />
+        </div>
           )
-        } }
+        ) : null}
         <Route
           render={() => (
             <MainLayout {...this}>
