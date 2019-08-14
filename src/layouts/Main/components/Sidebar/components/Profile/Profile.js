@@ -18,14 +18,16 @@ const useStyles = makeStyles(theme => ({
 
 const Profile = props => {
   const { className } = props;
-  const { name, type } = props.state.user;
-  console.log('prof props', props);
+  const { name, type,email } = props.state.user;
   const classes = useStyles();
 
   return (
     <div className={clsx(classes.root, className)}>
       <Typography className={classes.name} variant="h4">
         {name}
+      </Typography>
+      <Typography className={classes.name} variant="h5">
+        {email}
       </Typography>
       <Typography variant="body2">{type}</Typography>
     </div>

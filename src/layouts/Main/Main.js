@@ -24,7 +24,6 @@ const useStyles = makeStyles(theme => ({
 
 const Main = props => {
   const { children } = props;
-  console.log("main props",props)
   const classes = useStyles();
   const theme = useTheme();
   const isDesktop = useMediaQuery(theme.breakpoints.up('lg'), {
@@ -48,8 +47,7 @@ const Main = props => {
       className={clsx({
         [classes.root]: true,
         [classes.shiftContent]: isDesktop
-      })}
-    >
+      })}>
       <Topbar onSidebarOpen={handleSidebarOpen} {...props} />
       <Sidebar
         {...props}
@@ -59,7 +57,7 @@ const Main = props => {
       />
       <main className={classes.content}>
         {children}
-        <Footer  />
+        <Footer />
       </main>
     </div>
   );

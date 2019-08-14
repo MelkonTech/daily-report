@@ -47,7 +47,6 @@ class Routes extends React.Component {
   render() {
     let loged = this.state.user ? '/reports' : '/sign-in';
     if (this.state.user.type === 'PM') {
-
       return (
         <Switch>
           <Redirect exact from="/" to={loged} />

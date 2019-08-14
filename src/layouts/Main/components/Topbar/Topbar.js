@@ -25,7 +25,6 @@ const Topbar = props => {
   const classes = useStyles();
 
   const onSignOut = () => {
-    console.log('logout', props);
     logout();
     history.push("/sign-in")
   };

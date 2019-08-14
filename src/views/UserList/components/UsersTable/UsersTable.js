@@ -41,7 +41,6 @@ const useStyles = makeStyles(theme => ({
 
 
 const UsersTable = props => {
-  console.log('user table props',props)
   const { className, users , getUsers } = props;
   const { socket } = props.state
   const classes = useStyles();
@@ -103,7 +102,6 @@ const UsersTable = props => {
     
     socket.emit("changeType",userId,event.target.value,event.target.name)
     socket.on("changeTypeSuccees", (type,name) => { 
-      console.log(event,name)
       let m = document.getElementsByName("type")
       m.value = type
       name = type

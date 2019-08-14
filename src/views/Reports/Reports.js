@@ -15,7 +15,6 @@ import GridList from '@material-ui/core/GridList';
 const useStyles = theme => ({
   root: {
     width: '100%',
-    backgroundColor: theme.palette.background.paper,
   },
   inline: {
     display: 'inline',
@@ -99,12 +98,10 @@ class AlignItemsList extends React.Component {
   }
 
   getReports() {
-    console.log('get Reports',this.props)
     let { socket } = this.props.state;
     socket.emit('getReports',this.props.state.user._id);
     socket.on('getReportsSuccees',(rep) =>{
       this.setState({reports: rep });
-      console.log(this.state.reports)
     })
   }
   

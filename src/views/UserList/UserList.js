@@ -18,35 +18,37 @@ class UserList extends React.Component {
       users: [],
       error: null
     };
-    this.getUsers()
+    this.getUsers();
     this.getUsers = this.getUsers.bind(this);
   }
 
   getUsers() {
-    console.log('get users')
     let { socket } = this.props.state;
     socket.emit('getUsers', this.props.state.user.type);
     socket.on('getUsersSuccees', users => {
-      this.setState({ users: users})
-      console.log(users);
+      this.setState({ users: users });
     });
     socket.on('getUsersError', error => {
-      console.log(error)
-      this.setState({ error: error})
+      this.setState({ error: error });
       console.log(error);
     });
   }
 
   render() {
-    let usersTable = this.state.error ? <div>{this.state.error}</div> : (
-      <UsersTable  {...this.props} getUsers={this.getUsers} users={this.state.users} />)
-    const {classes} = this.props;
+    let usersTable = this.state.error ? (
+      <div>{this.state.error}</div>
+    ) : (
+      <UsersTable
+        {...this.props}
+        getUsers={this.getUsers}
+        users={this.state.users}
+      />
+    );
+    const { classes } = this.props;
     return (
       <div className={classes.root}>
         <UsersToolbar />
-        <div className={classes.content}>
-          {usersTable}
-        </div>
+        <div className={classes.content}>{usersTable}</div>
       </div>
     );
   }

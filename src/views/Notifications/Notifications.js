@@ -31,23 +31,20 @@ class AlignItemsList extends React.Component {
 
 
   getAllReports() {
-    console.log('get All Reports',this.props)
     let { socket } = this.props.state;
     socket.emit('getAllReports',this.props.state.user._id);
     socket.on('getAllReportsSuccees',(rep) =>{
       this.setState({reports: rep });
-      console.log(this.state.reports)
     })
     socket.on('getAllReportsError',(error) =>{
       console.log(error)
     })
   }
   
-  handleChange = (event,reportId) => {
+  handleChange = (reportId) => {
     let {socket} = this.props.state
     socket.emit("reportAccept",reportId)
     socket.on("reportAcceptSuccees", () => { 
-      console.log("accepted")
       this.getAllReports()
     })
   };
@@ -59,7 +56,7 @@ class AlignItemsList extends React.Component {
     <Paper className={classes.paper}>
     {this.state.reports.map(report => {
       return (
-    <Grid container spacing={2} key={report._idz}>
+    <Grid container spacing={2} key={report._id}>
       <Grid item xs={12} sm container>
         <Grid item xs container direction="column" spacing={2}>
           <Grid item xs>
@@ -70,11 +67,11 @@ class AlignItemsList extends React.Component {
               {report.description}
             </Typography>
             <Typography variant="body2" color="textSecondary">
-              spent {report.spent} hour(s) ||  {report.estionation} estionation
+              spent {report.spent} hour(s)  --  {report.estimation} estimation
             </Typography>
           </Grid>
           <Grid item>
-          <Button variant="contained" color="primary" onClick={(event) => { return this.handleChange(event,report._id)}} className={classes.button}>
+          <Button variant="contained" color={report.isAccepted ? "primary" : 'secondary'} onClick={() => { return this.handleChange(report._id)}} className={classes.button}>
           {report.isAccepted ? "Decline" : "Accept"}
         </Button>
           </Grid>
