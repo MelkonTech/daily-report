@@ -18,7 +18,7 @@ const useStyles = makeStyles(theme => ({
 
 const Profile = props => {
   const { className } = props;
-  const { name, type } = props.user;
+  const { name, type } = props.state.user;
   console.log('prof props', props);
   const classes = useStyles();
 

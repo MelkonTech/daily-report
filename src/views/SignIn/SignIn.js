@@ -124,7 +124,8 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const SignIn = props => {
-  const { history , getUser, socket} = props;
+  const { socket } = props.state;
+  const { getuser, history } = props;
 
   const classes = useStyles();
 
@@ -170,63 +171,41 @@ const SignIn = props => {
 
   const handleSignIn = event => {
     event.preventDefault();
-    socket.emit("login", formState.values)
-    socket.on("LogSuccees", data => {
-      localStorage.setItem("token",data.token)
-      getUser()
+    socket.emit('login', formState.values);
+    socket.on('LogSuccees', data => {
+      localStorage.setItem('token', data.token);
+      getuser();
       history.push('/account');
-    })
-    socket.on("LogError", data => {
-      console.log(data.error)
-    })
+    });
+    socket.on('LogError', data => {
+      console.log(data.error);
+    });
   };
 
   const hasError = field =>
     formState.touched[field] && formState.errors[field] ? true : false;
 
-
   return (
     <div className={classes.root}>
-      <Grid
-        className={classes.grid}
-        container
-      >
-        <Grid
-          className={classes.quoteContainer}
-          item
-          lg={5}
-        >
+      <Grid className={classes.grid} container>
+        <Grid className={classes.quoteContainer} item lg={5}>
           <div className={classes.quote}>
             <div className={classes.quoteInner}>
-              <Typography
-                className={classes.quoteText}
-                variant="h1"
-              >
+              <Typography className={classes.quoteText} variant="h1">
                 Daily Reports
               </Typography>
               <div className={classes.person}>
-                <Typography
-                  className={classes.name}
-                  variant="body1"
-                >
+                <Typography className={classes.name} variant="body1">
                   ...
                 </Typography>
-                <Typography
-                  className={classes.bio}
-                  variant="body2"
-                >
+                <Typography className={classes.bio} variant="body2">
                   for AOD
                 </Typography>
               </div>
             </div>
           </div>
         </Grid>
-        <Grid
-          className={classes.content}
-          item
-          lg={7}
-          xs={12}
-        >
+        <Grid className={classes.content} item lg={7} xs={12}>
           <div className={classes.content}>
             <div className={classes.contentHeader}>
               <IconButton onClick={handleBack}>
@@ -234,17 +213,11 @@ const SignIn = props => {
               </IconButton>
             </div>
             <div className={classes.contentBody}>
-              <form
-                className={classes.form}
-                onSubmit={handleSignIn}
-              >
-                <Typography
-                  className={classes.title}
-                  variant="h2"
-                >
+              <form className={classes.form} onSubmit={handleSignIn}>
+                <Typography className={classes.title} variant="h2">
                   Sign in
                 </Typography>
-               
+
                 <TextField
                   className={classes.textField}
                   error={hasError('email')}
@@ -280,20 +253,12 @@ const SignIn = props => {
                   fullWidth
                   size="large"
                   type="submit"
-                  variant="contained"
-                >
+                  variant="contained">
                   Sign in now
                 </Button>
-                <Typography
-                  color="textSecondary"
-                  variant="body1"
-                >
+                <Typography color="textSecondary" variant="body1">
                   Don't have an account?{' '}
-                  <Link
-                    component={RouterLink}
-                    to="/sign-up"
-                    variant="h6"
-                  >
+                  <Link component={RouterLink} to="/sign-up" variant="h6">
                     Sign up
                   </Link>
                 </Typography>

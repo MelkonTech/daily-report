@@ -4,11 +4,7 @@ import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/styles';
 import { Divider, Drawer } from '@material-ui/core';
 import PeopleIcon from '@material-ui/icons/People';
-import ShoppingBasketIcon from '@material-ui/icons/ShoppingBasket';
-import TextFieldsIcon from '@material-ui/icons/TextFields';
 import ImageIcon from '@material-ui/icons/Image';
-import AccountBoxIcon from '@material-ui/icons/AccountBox';
-import SettingsIcon from '@material-ui/icons/Settings';
 
 import { Profile, SidebarNav } from './components';
 
@@ -36,42 +32,25 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const Sidebar = props => {
-  const { open, variant, onClose, className, ...rest } = props;
-  console.log("sidebar props",props)
+  const { open, variant, onClose, className } = props;
+  const {type} = props.state.user
   const classes = useStyles();
-
   const pages = [
     {
+      title: 'Reports',
+      href: '/reports',
+      icon: <ImageIcon />
+    },
+  ]
+
+  if(type === "admin"){
+    pages.unshift({
       title: 'Users',
       href: '/users',
       icon: <PeopleIcon />
-    },
-    {
-      title: 'Products',
-      href: '/products',
-      icon: <ShoppingBasketIcon />
-    },
-    {
-      title: 'Typography',
-      href: '/typography',
-      icon: <TextFieldsIcon />
-    },
-    {
-      title: 'Reports',
-      href: '/Reports',
-      icon: <ImageIcon />
-    },
-    {
-      title: 'Account',
-      href: '/account',
-      icon: <AccountBoxIcon />
-    },
-    {
-      title: 'Settings',
-      href: '/settings',
-      icon: <SettingsIcon />
-    }
-  ];
+    },)
+  }
+  
 
   return (
     <Drawer
@@ -82,7 +61,6 @@ const Sidebar = props => {
       variant={variant}
     >
       <div
-        {...rest}
         className={clsx(classes.root, className)}
       >
         <Profile {...props}/>

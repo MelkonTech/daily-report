@@ -81,10 +81,14 @@ io.on('connection', socket => {
     
     })
 
-    socket.on('getUsers', () => {
+    socket.on('getUsers', (type) => {
+        if(type === "admin"){
         User.find({}, (err,users) => {
             socket.emit("getUsersSuccees",users)
         })
+    }else{
+        socket.emit("getUsersError","You must be admin for this tool")
+    }
     
     })
     

@@ -20,8 +20,6 @@ import {
 } from '@material-ui/core';
 
 import { getInitials } from 'helpers';
-import openSocket from 'socket.io-client';
-const socket = openSocket('http://localhost:4001');
 
 const useStyles = makeStyles(theme => ({
   root: {},
@@ -45,7 +43,9 @@ const useStyles = makeStyles(theme => ({
 
 
 const UsersTable = props => {
-  const { className, users, ...rest } = props;
+  console.log('user table props',props)
+  const { className, users , getUsers } = props;
+  const { socket } = props.state
   const classes = useStyles();
 
   const [selectedUsers, setSelectedUsers] = useState([]);
@@ -109,7 +109,7 @@ const UsersTable = props => {
       let m = document.getElementsByName("type")
       m.value = type
       name = type
-      window.location.reload(false);
+      getUsers()
     })
   };
   const handlePageChange = (event, page) => {
@@ -121,7 +121,6 @@ const UsersTable = props => {
   };
   return (
     <Card
-      {...rest}
       className={clsx(classes.root, className)}
     >
       <CardContent className={classes.content}>

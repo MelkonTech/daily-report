@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link as RouterLink, withRouter } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import validate from 'validate.js';
 import { makeStyles } from '@material-ui/styles';
@@ -123,8 +123,8 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const SignUp = props => {
-  const { history, socket } = props;
-
+  const { history } = props.props;
+  const {socket} = props.state
   const classes = useStyles();
 
   const [formState, setFormState] = useState({
@@ -315,4 +315,4 @@ SignUp.propTypes = {
   history: PropTypes.object
 };
 
-export default withRouter(SignUp);
+export default SignUp;

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink , withRouter} from 'react-router-dom';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/styles';
 import { AppBar, Toolbar, Badge, Hidden, IconButton } from '@material-ui/core';
@@ -21,16 +21,18 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const Topbar = props => {
-  const { className, onSidebarOpen, ...rest } = props;
+  const { className, onSidebarOpen,logout, history} = props;
 
   const classes = useStyles();
+
   const onSignOut = () => {
-    props.logout();
     console.log('logout', props);
+    logout();
+    history.push("/sign-in")
   };
   const [notifications] = useState([]);
   return (
-    <AppBar {...rest} className={clsx(classes.root, className)}>
+    <AppBar className={clsx(classes.root, className)}>
       <Toolbar>
         <RouterLink to="/">
           <img alt="Logo" src="/images/logos/logo--white.png" width="50px" />
@@ -67,4 +69,4 @@ Topbar.propTypes = {
   onSidebarOpen: PropTypes.func
 };
 
-export default Topbar;
+export default withRouter(Topbar);

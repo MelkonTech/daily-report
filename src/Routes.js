@@ -1,41 +1,35 @@
 import React from 'react';
-import { Switch, Redirect, Route, withRouter } from 'react-router-dom';
+import { Switch, Redirect,Route, withRouter } from 'react-router-dom';
 import { Main as MainLayout, Minimal as MinimalLayout } from './layouts';
 
 import {
-  ProductList as ProductListView,
   UserList as UserListView,
-  Typography as TypographyView,
   Reports as ReportsView,
-  Account as AccountView,
-  Settings as SettingsView,
   SignUp as SignUpView,
   SignIn as SignInView,
   NotFound as NotFoundView
 } from './views';
-
 import openSocket from 'socket.io-client';
 
 class Routes extends React.Component {
   constructor(props) {
     super(props);
-    const socket = openSocket('http://localhost:4001');
+    const socket = openSocket('http://localhost:4000');
     this.state = {
       user: {},
-      socket: socket,
-      getUser: this.getUser,
-      logout: this.logout
+      socket: socket
     };
-    this.getUser();
-    this.getUser = this.getUser.bind(this);
+    this.getuser()
+    this.getuser = this.getuser.bind(this);
     this.logout = this.logout.bind(this);
   }
 
-  getUser() {
+  getuser() {
     let { socket } = this.state;
     let localToken = localStorage.getItem('token');
+    console.log(localToken)
     if (localToken) {
-      console.log('geting User');
+      console.log('geting User',this.state);
       socket.emit('getUser', localToken);
       socket.on('getUserSuccees', user => {
         this.setState({
@@ -45,78 +39,46 @@ class Routes extends React.Component {
     }
   }
 
-  logout() {
-    localStorage.removeItem('token');
-    console.log('routes history', this.props);
-    this.props.history.push('/sign-in');
+  logout(){
+    localStorage.removeItem("token")
+    console.log('logout main',this.state)
     this.setState({
-      user: {}
-    });
+      user:{}
+    })
   }
   render() {
-    console.log('render state', this.state);
+    console.log('render state',this.state)
     let loged = localStorage.getItem('token') ? '/account' : '/sign-in';
     return (
       <Switch>
         <Redirect exact from="/" to={loged} />
-        <Route
+        
+        {if(this.state.user.type === admin){
+           (
+            <Route
           render={() => (
-            <MainLayout {...this.state}>
-              <UserListView {...this.state} />
+            <MainLayout {...this }>
+              <UserListView {...this} />
             </MainLayout>
           )}
           exact
           path="/users"
         />
+          )
+        } }
         <Route
           render={() => (
-            <MainLayout {...this.state}>
-              <ProductListView {...this.state} />
+            <MainLayout {...this}>
+              <ReportsView {...this} />
             </MainLayout>
           )}
           exact
-          path="/products"
-        />
-        <Route
-          render={() => (
-            <MainLayout {...this.state}>
-              <TypographyView {...this.state} />
-            </MainLayout>
-          )}
-          exact
-          path="/typography"
-        />
-        <Route
-          render={() => (
-            <MainLayout {...this.state}>
-              <ReportsView {...this.state} />
-            </MainLayout>
-          )}
-          exact
-          path="/Reports"
-        />
-        <Route
-          render={() => (
-            <MainLayout {...this.state}>
-              <AccountView {...this.state} />
-            </MainLayout>
-          )}
-          exact
-          path="/account"
-        />
-        <Route
-          render={() => (
-            <MainLayout {...this.state}>
-              <SettingsView {...this.state} />
-            </MainLayout>
-          )}
-          exact
-          path="/settings"
+          path="/reports"
         />
         <Route
           render={() => (
             <MinimalLayout>
-              <SignUpView {...this.state} />
+              <SignUpView {...this} />
             </MinimalLayout>
           )}
           exact
@@ -124,8 +86,8 @@ class Routes extends React.Component {
         />
         <Route
           render={() => (
-            <MinimalLayout>
-              <SignInView {...this.state} />
+            <MinimalLayout >
+              <SignInView  {...this} />
             </MinimalLayout>
           )}
           exact
@@ -134,7 +96,7 @@ class Routes extends React.Component {
         <Route
           render={() => (
             <MinimalLayout>
-              <NotFoundView {...this.state} />
+              <NotFoundView {...this} />
             </MinimalLayout>
           )}
           exact

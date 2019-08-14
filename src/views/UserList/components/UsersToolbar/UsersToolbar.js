@@ -68,7 +68,6 @@ const useStyles = makeStyles(theme => ({
 
 
 const UsersToolbar = props => {
-  const { history} = props
   const [formState, setFormState] = useState({
     isValid: false,
     values: {},

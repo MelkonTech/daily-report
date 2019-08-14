@@ -1,37 +1,55 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/styles';
+import { withStyles } from '@material-ui/styles';
 import { UsersToolbar, UsersTable } from './components';
 
-const useStyles = makeStyles(theme => ({
+const Styles = theme => ({
   root: {
     padding: theme.spacing(3)
   },
   content: {
     marginTop: theme.spacing(2)
   }
-}));
+});
 
-const UserList = props => {
-  console.log("userlist props",props )
-  const {socket} = props
-  var userss = []
-  socket.emit("getUsers")
-  socket.on("getUsersSuccees", (users) => {
-   userss = users;
-   console.log(users)
-})
-socket.on("getUserError",(error) => {
-  console.log(error)
-})
-  const classes = useStyles();
-  return (
-    <div className={classes.root}>
-      <UsersToolbar />
-      <div className={classes.content}>
-        <UsersTable users={userss} />
+class UserList extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      users: [],
+      error: null
+    };
+    this.getUsers()
+    this.getUsers = this.getUsers.bind(this);
+  }
+
+  getUsers() {
+    console.log('get users')
+    let { socket } = this.props.state;
+    socket.emit('getUsers', this.props.state.user.type);
+    socket.on('getUsersSuccees', users => {
+      this.setState({ users: users})
+      console.log(users);
+    });
+    socket.on('getUsersError', error => {
+      console.log(error)
+      this.setState({ error: error})
+      console.log(error);
+    });
+  }
+
+  render() {
+    let usersTable = this.state.error ? <div>{this.state.error}</div> : (
+      <UsersTable  {...this.props} getUsers={this.getUsers} users={this.state.users} />)
+    const {classes} = this.props;
+    return (
+      <div className={classes.root}>
+        <UsersToolbar />
+        <div className={classes.content}>
+          {usersTable}
+        </div>
       </div>
-    </div>
-  );
-};
+    );
+  }
+}
 
-export default UserList;
+export default withStyles(Styles)(UserList);
