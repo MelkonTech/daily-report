@@ -95,7 +95,6 @@ class AlignItemsList extends React.Component {
     socket.emit("sendReport",user._id,description,estimation,spent)
     socket.on("sendReportSuccees",() => {
       socket.emit('getReports')
-
     })
   }
 

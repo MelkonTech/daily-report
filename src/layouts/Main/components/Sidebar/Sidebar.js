@@ -5,7 +5,7 @@ import { makeStyles } from '@material-ui/styles';
 import { Divider, Drawer } from '@material-ui/core';
 import PeopleIcon from '@material-ui/icons/People';
 import ImageIcon from '@material-ui/icons/Image';
-
+import NotificationsIcon from '@material-ui/icons/NotificationsOutlined';
 import { Profile, SidebarNav } from './components';
 
 const useStyles = makeStyles(theme => ({
@@ -43,12 +43,24 @@ const Sidebar = props => {
     },
   ]
 
-  if(type === "admin"){
-    pages.unshift({
-      title: 'Users',
-      href: '/users',
-      icon: <PeopleIcon />
-    },)
+  if(type !== "Developer"){
+    if(type === "admin"){
+      pages.unshift({
+        title: 'Users',
+        href: '/users',
+        icon: <PeopleIcon />
+      },{
+        title: 'Notifications',
+        href: '/notifications',
+        icon: <NotificationsIcon />
+      })
+    }else{
+      pages.unshift({
+        title: 'Notifications',
+        href: '/notifications',
+        icon: <NotificationsIcon />
+      })
+  }
   }
   
 

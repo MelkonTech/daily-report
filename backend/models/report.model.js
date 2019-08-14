@@ -6,6 +6,7 @@ const reportSchema = new Schema(
         description:{type:String, default:'' },
         estimation:{type:Number },
         spent:{type:Number },
+        isAccepted:{type:Boolean,default:false}
     },{
         timestamps:true
     }

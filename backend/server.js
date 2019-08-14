@@ -110,12 +110,33 @@ io.on('connection', socket => {
         socket.emit("sendReportSuccees")
     })
        
+    socket.on('getAllReports', (userId) => {
+        User.findById(userId)
+            .then(user => {
+                if(user.type !== "Developer"){
+                Report.find({})
+                    .populate('author') 
+                    .exec(function (err, reports) {
+                        io.sockets.emit("getAllReportsSuccees",reports)
+                    });
+                }else{
+                    socket.emit("getAllReportsError","You musb be PM or admin")}
+                })
+        })
+    
+        socket.on('reportAccept', (reportId) => {
+            Report.findById(reportId)
+                .then(report => {
+                    report.isAccepted = !report.isAccepted
+                    report.save()
+                    socket.emit("reportAcceptSuccees")
+                })
         
-
+        })
     socket.on('getReports', (userId) => {
         User.findById(userId)
-            .then(() => {
-                Report.find({})
+            .then(user => {
+                Report.find({isAccepted:true})
                     .populate('author') 
                     .exec(function (err, reports) {
                         io.sockets.emit("getReportsSuccees",reports)

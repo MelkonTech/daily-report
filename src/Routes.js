@@ -1,5 +1,5 @@
 import React from 'react';
-import { Switch, Redirect,Route, withRouter } from 'react-router-dom';
+import { Switch, Redirect, Route, withRouter } from 'react-router-dom';
 import { Main as MainLayout, Minimal as MinimalLayout } from './layouts';
 
 import {
@@ -7,7 +7,8 @@ import {
   Reports as ReportsView,
   SignUp as SignUpView,
   SignIn as SignInView,
-  NotFound as NotFoundView
+  NotFound as NotFoundView,
+  Notifications as NotificationsView
 } from './views';
 import openSocket from 'socket.io-client';
 
@@ -19,7 +20,7 @@ class Routes extends React.Component {
       user: {},
       socket: socket
     };
-    this.getuser()
+    this.getuser();
     this.getuser = this.getuser.bind(this);
     this.logout = this.logout.bind(this);
   }
@@ -27,9 +28,7 @@ class Routes extends React.Component {
   getuser() {
     let { socket } = this.state;
     let localToken = localStorage.getItem('token');
-    console.log(localToken)
     if (localToken) {
-      console.log('geting User',this.state);
       socket.emit('getUser', localToken);
       socket.on('getUserSuccees', user => {
         this.setState({
@@ -39,83 +38,175 @@ class Routes extends React.Component {
     }
   }
 
-  logout(){
-    localStorage.removeItem("token")
-    console.log('logout main',this.state)
+  logout() {
+    localStorage.removeItem('token');
     this.setState({
-      user:{}
-    })
+      user: {}
+    });
   }
   render() {
-    console.log('render state',this.state)
-    let loged = localStorage.getItem('token') ? '/reports' : '/sign-in';
-    return (
-      <Switch>
-        <Redirect exact from="/" to={loged} />
-        
-        {this.state.user.type === "admin" ? (
-           (
-             <div>
-            <Route
-          render={() => (
-            <MainLayout {...this }>
-              <UserListView {...this} />
-            </MainLayout>
-          )}
-          exact
-          path="/users"
-        />
-        <Route
-          render={() => (
-            <MainLayout {...this }>
-              <UserListView {...this} />
-            </MainLayout>
-          )}
-          exact
-          path="/notifications"
-        />
-        </div>
-          )
-        ) : null}
-        <Route
-          render={() => (
-            <MainLayout {...this}>
-              <ReportsView {...this} />
-            </MainLayout>
-          )}
-          exact
-          path="/reports"
-        />
-        <Route
-          render={() => (
-            <MinimalLayout>
-              <SignUpView {...this} />
-            </MinimalLayout>
-          )}
-          exact
-          path="/sign-up"
-        />
-        <Route
-          render={() => (
-            <MinimalLayout >
-              <SignInView  {...this} />
-            </MinimalLayout>
-          )}
-          exact
-          path="/sign-in"
-        />
-        <Route
-          render={() => (
-            <MinimalLayout>
-              <NotFoundView {...this} />
-            </MinimalLayout>
-          )}
-          exact
-          path="/not-found"
-        />
-        <Redirect to="/not-found" />
-      </Switch>
-    );
+    let loged = this.state.user ? '/reports' : '/sign-in';
+    if (this.state.user.type === 'PM') {
+
+      return (
+        <Switch>
+          <Redirect exact from="/" to={loged} />
+
+          <Route
+            render={() => (
+              <MainLayout {...this}>
+                <NotificationsView {...this} />
+              </MainLayout>
+            )}
+            exact
+            path="/notifications"
+          />
+
+          <Route
+            render={() => (
+              <MainLayout {...this}>
+                <ReportsView {...this} />
+              </MainLayout>
+            )}
+            exact
+            path="/reports"
+          />
+          <Route
+            render={() => (
+              <MinimalLayout>
+                <SignUpView {...this} />
+              </MinimalLayout>
+            )}
+            exact
+            path="/sign-up"
+          />
+          <Route
+            render={() => (
+              <MinimalLayout>
+                <SignInView {...this} />
+              </MinimalLayout>
+            )}
+            exact
+            path="/sign-in"
+          />
+          <Route
+            render={() => (
+              <MinimalLayout>
+                <NotFoundView {...this} />
+              </MinimalLayout>
+            )}
+            exact
+            path="/not-found"
+          />
+          <Redirect to="/not-found" />
+        </Switch>
+      );
+    } else if (this.state.user.type === 'admin') {
+      return (
+        <Switch>
+          <Redirect exact from="/" to={loged} />
+
+          <Route
+            render={() => (
+              <MainLayout {...this}>
+                <UserListView {...this} />
+              </MainLayout>
+            )}
+            exact
+            path="/users"
+          />
+          <Route
+            render={() => (
+              <MainLayout {...this}>
+                <NotificationsView {...this} />
+              </MainLayout>
+            )}
+            exact
+            path="/notifications"
+          />
+          <Route
+            render={() => (
+              <MainLayout {...this}>
+                <ReportsView {...this} />
+              </MainLayout>
+            )}
+            exact
+            path="/reports"
+          />
+          <Route
+            render={() => (
+              <MinimalLayout>
+                <SignUpView {...this} />
+              </MinimalLayout>
+            )}
+            exact
+            path="/sign-up"
+          />
+          <Route
+            render={() => (
+              <MinimalLayout>
+                <SignInView {...this} />
+              </MinimalLayout>
+            )}
+            exact
+            path="/sign-in"
+          />
+          <Route
+            render={() => (
+              <MinimalLayout>
+                <NotFoundView {...this} />
+              </MinimalLayout>
+            )}
+            exact
+            path="/not-found"
+          />
+        </Switch>
+      );
+    } else {
+      return (
+        <Switch>
+          <Redirect exact from="/" to={loged} />
+
+          <Route
+            render={() => (
+              <MainLayout {...this}>
+                <ReportsView {...this} />
+              </MainLayout>
+            )}
+            exact
+            path="/reports"
+          />
+          <Route
+            render={() => (
+              <MinimalLayout>
+                <SignUpView {...this} />
+              </MinimalLayout>
+            )}
+            exact
+            path="/sign-up"
+          />
+          <Route
+            render={() => (
+              <MinimalLayout>
+                <SignInView {...this} />
+              </MinimalLayout>
+            )}
+            exact
+            path="/sign-in"
+          />
+          <Route
+            render={() => (
+              <MinimalLayout>
+                <NotFoundView {...this} />
+              </MinimalLayout>
+            )}
+            exact
+            path="/not-found"
+          />
+          <Redirect to="/not-found" />
+        </Switch>
+      );
+    }
   }
 }
 
